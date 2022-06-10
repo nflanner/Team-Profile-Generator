@@ -1,9 +1,11 @@
 // required imports
 const inquirer = require('inquirer');
 const fs = require('fs');
-const generateHTML = require('./src/generateHTML');
+const Manager = require('./lib/manager');
+const Engineer = require('./lib/engineer');
+const Intern = require('./lib/intern');
 
-// User input array for the initial managers questions
+// User input array for the initial manager.js questions
 const managerQuestions = [
     {
         type: 'input',
@@ -74,16 +76,21 @@ const internQuestions =
 
 // Function for file writing
 function writeToFile(fileName, data) {
-    fs.writeFile(fileName, generatedHTML(data), err =>
+    fs.writeFile(fileName, generateHTML(data), err =>
     err ? console.error(err) : console.log('HTML Initially Stored!')
     );
 }
 
 // Function for file appending
 function appendToFile(fileName, data) {
-    fs.appendFile(fileName, generatedHTML(data), err =>
+    fs.appendFile(fileName, generateHTML(data), err =>
         err ? console.error(err) : console.log('HTML Appended!')
     );
+}
+
+// data is the manager or employee (engineer or intern) object
+function generateHTML(data) {
+    return;
 }
 
 // Function to initialize the app
@@ -91,16 +98,19 @@ function init() {
     console.log('working');
 
     // Ask about manager first
+    console.log(managerQuestions);
     inquirer
         .prompt(managerQuestions)
         .then((response) => {
             console.log(response);
-            writeToFile('./dist/generated-HTML.HTML', response);
-            console.log('Successfully wrote to file!');
+            const manager = new Manager(response.name, response.id, response.email, response.office);
+            writeToFile('./dist/generated-HTML.HTML', manager);
+            console.log('Successfully wrote manager!');
         })
 
     // Continue building with employees (or finish)
     let buildTeam = true;
+    let isEngineer;
     let finalEmployeeQuestions;
     while(buildTeam) {
         // check to build team or not
@@ -110,18 +120,26 @@ function init() {
                 if(response == 'Finished building team') {
                     buildTeam = false;
                 } else if (response == 'Engineer') {
+                    isEngineer = true;
                     finalEmployeeQuestions = employeeQuestions.push(engineerQuestions);
                 } else {
+                    isEngineer = false;
                     finalEmployeeQuestions = employeeQuestions.push(internQuestions);
                 }
             })
 
+        let employee;
         if (buildTeam) {
             inquirer
                 .prompt(finalEmployeeQuestions)
                 .then((response) => {
-                    appendToFile('./dist/generated-HTML.HTML', response);
-                    console.log('Successfully appended file!');
+                    if(isEngineer) {
+                        employee = new Engineer(response.name, response.id, response.email, response.github);
+                    } else {
+                        employee = new Intern(response.name, response.id, response.email, response.school);
+                    }
+                    appendToFile('./dist/generated-HTML.HTML', employee);
+                    console.log('Successfully appended employee!');
                 })
         }
     }
