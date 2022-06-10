@@ -90,7 +90,64 @@ function appendToFile(fileName, data) {
 
 // data is the manager or employee (engineer or intern) object
 function generateHTML(data) {
-    return;
+    const header = `<!DOCTYPE html>` +
+        `<html lang=\"en\">` +
+
+        `<head>` +
+        `<meta charset=\"UTF-8\">` +
+        `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">` +
+        `<meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">` +
+        `<meta name=\"Description\" content=\"Enter your description here\" />` +
+        `<meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">` +
+        `<link rel=\"stylesheet\" href=\"./template.css\">` +
+        `<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css\">` +
+       ` <title>Team Profile</title>` +
+    `</head>` +
+
+    `<body>` +
+    `<nav class=\"navbar navbar-light navbar-default text-white justify-content-center mb-5\">` +
+        `<div>` +
+            `My Team` +
+        `</div>` +
+    `</nav>`;
+
+    const footer = `</body>` +
+
+            `</html>`;
+
+    const role = data.get();
+
+    const trait = role === 'Manager' ? data.office : role === 'Engineer' ? data.github : data.school;
+
+    return header + generateCard(data.id, data.name, role, data.email, trait) + footer;
+}
+
+function generateCard(id, name, role, email, trait) {
+    const cardBlock = `<section className=\"container\">` +
+        `<div className=\"row\">` +
+            `<div className=\"col-3 border p-2 m-2 secondary flex-column\">` +
+                `<div className=\"card\">` +
+                    `<div className=\"card-body text-white bg-primary\">` +
+                        `<h5 className=\"card-title\">${name}</h5>` +
+                        `<p className=\"card-text\">${role}</p>` +
+                    `</div>` +
+
+                    `<div>` +
+                        `<ul className=\"list-group list-group-flush bg-secondary\">` +
+                            `<li className=\"list-group-item\">ID: ${id}</li>` +
+                            `<li className=\"list-group-item\">Email: <a href=\"#\" className=\"card-link\">email here</a></li>` +
+                            `<li className=\"list-group-item\">
+                                ${trait == 'manager' ? ('Office: ' + trait)
+                                : trait == 'engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>` 
+                                    : 'School: ' + trait}
+                                </li>` +
+                        `</ul>` +
+                    `</div>` +
+                `</div>` +
+            `</div>` +
+        `</div>` +
+    `</section>`;
+    return cardBlock
 }
 
 // Function to initialize the app
