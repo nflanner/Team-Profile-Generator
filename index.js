@@ -155,7 +155,6 @@ function init() {
     console.log('working');
 
     // Ask about manager first
-    console.log(managerQuestions);
     inquirer
         .prompt(managerQuestions)
         .then((response) => {
