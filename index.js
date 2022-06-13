@@ -75,22 +75,22 @@ const internQuestions =
     };
 
 // Function for file writing
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, generateHTML(data), err =>
+function writeToFile(fileName, data, header, footer) {
+    fs.writeFile(fileName, generateHTML(data, header, footer), err =>
     err ? console.error(err) : console.log('HTML Initially Stored!')
     );
 }
 
 // Function for file appending
-function appendToFile(fileName, data) {
-    fs.appendFile(fileName, generateHTML(data), err =>
+function appendToFile(fileName, data, header, footer) {
+    fs.appendFile(fileName, generateHTML(data, header, footer), err =>
         err ? console.error(err) : console.log('HTML Appended!')
     );
 }
 
 // data is the manager or employee (engineer or intern) object
-function generateHTML(data) {
-    const header = `<!DOCTYPE html>` +
+function generateHTML(data, header, footer) {
+    const headerHTML = `<!DOCTYPE html>` +
         `<html lang=\"en\">` +
 
         `<head>` +
@@ -111,15 +111,22 @@ function generateHTML(data) {
         `</div>` +
     `</nav>`;
 
-    const footer = `</body>` +
+    const footerHTML = `</body>` +
 
             `</html>`;
 
-    const role = data.get();
 
-    const trait = role === 'Manager' ? data.office : role === 'Engineer' ? data.github : data.school;
+    const role = 'name' in data ? data.getRole() : '';
+    console.log(`role: ${role}`);
+    const trait = role == 'Manager' ? data.office : role == 'Engineer' ? data.github : data.school;
 
-    return header + generateCard(data.id, data.name, role, data.email, trait) + footer;
+
+    let finalStr;
+    finalStr = header && role ? headerHTML + generateCard(data.id, data.name, role, data.email, trait) 
+        : data && role ? generateCard(data.id, data.name, role, data.email, trait)
+        : footerHTML; 
+    
+    return finalStr;
 }
 
 function generateCard(id, name, role, email, trait) {
@@ -137,8 +144,8 @@ function generateCard(id, name, role, email, trait) {
                             `<li className=\"list-group-item\">ID: ${id}</li>` +
                             `<li className=\"list-group-item\">Email: <a href=\"#\" className=\"card-link\">email here</a></li>` +
                             `<li className=\"list-group-item\">
-                                ${trait == 'manager' ? ('Office: ' + trait)
-                                : trait == 'engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>` 
+                                ${role == 'Manager' ? ('Office: ' + trait)
+                                : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>` 
                                     : 'School: ' + trait}
                                 </li>` +
                         `</ul>` +
@@ -151,52 +158,62 @@ function generateCard(id, name, role, email, trait) {
 }
 
 // Function to initialize the app
-function init() {
+async function init() {
     console.log('working');
 
     // Ask about manager first
-    inquirer
+    await inquirer
         .prompt(managerQuestions)
-        .then((response) => {
-            console.log(response);
+        .then(async (response) => {
             const manager = new Manager(response.name, response.id, response.email, response.office);
-            writeToFile('./dist/generated-HTML.HTML', manager);
+            console.log(manager);
+            writeToFile('./dist/generated-HTML.HTML', manager, true, false);
             console.log('Successfully wrote manager!');
         })
 
     // Continue building with employees (or finish)
     let buildTeam = true;
     let isEngineer;
-    let finalEmployeeQuestions;
     while(buildTeam) {
         // check to build team or not
-        inquirer
+        let finalEmployeeQuestions = employeeQuestions.slice(0, employeeQuestions.length);
+        await inquirer
             .prompt(buildQuestions)
-            .then((response) => {
-                if(response == 'Finished building team') {
+            .then(async (response) => {
+                console.log(response.employee);
+                if(response.employee == 'Finished building team') {
                     buildTeam = false;
-                } else if (response == 'Engineer') {
+                } else if (response.employee == 'Engineer') {
+                    console.log('engineer block');
                     isEngineer = true;
-                    finalEmployeeQuestions = employeeQuestions.push(engineerQuestions);
+                    finalEmployeeQuestions.push(engineerQuestions);
                 } else {
+                    console.log('intern block');
                     isEngineer = false;
-                    finalEmployeeQuestions = employeeQuestions.push(internQuestions);
+                    finalEmployeeQuestions.push(internQuestions);
                 }
+                console.log(`response: ${response}`);
             })
 
         let employee;
         if (buildTeam) {
-            inquirer
+            console.log(finalEmployeeQuestions);
+            console.log('in emplyee block')
+            await inquirer
                 .prompt(finalEmployeeQuestions)
-                .then((response) => {
+                .then(async (response) => {
                     if(isEngineer) {
                         employee = new Engineer(response.name, response.id, response.email, response.github);
                     } else {
                         employee = new Intern(response.name, response.id, response.email, response.school);
                     }
-                    appendToFile('./dist/generated-HTML.HTML', employee);
+                    appendToFile('./dist/generated-HTML.HTML', employee, false, true);
                     console.log('Successfully appended employee!');
                 })
+        } else {
+            console.log('writing footer');
+            appendToFile('.dist/generated-HTML.HTML', {}, false, true);
+            console.log('DONE!');
         }
     }
 }
