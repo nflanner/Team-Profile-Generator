@@ -90,30 +90,28 @@ function appendToFile(fileName, data, header, footer) {
 
 // data is the manager or employee (engineer or intern) object
 function generateHTML(data, header, footer) {
-    const headerHTML = `<!DOCTYPE html>` +
-        `<html lang=\"en\">` +
+    const headerHTML = `<!DOCTYPE html>
+    <html lang=\"en\">
+    <head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">
+    <meta name=\"Description\" content=\"Enter your description here\" />
+    <meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">
+    <link rel=\"stylesheet\" href=\"./template.css\">
+    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css\">
+    <title>Team Profile</title>
+    </head>
 
-        `<head>` +
-        `<meta charset=\"UTF-8\">` +
-        `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">` +
-        `<meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">` +
-        `<meta name=\"Description\" content=\"Enter your description here\" />` +
-        `<meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">` +
-        `<link rel=\"stylesheet\" href=\"./template.css\">` +
-        `<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css\">` +
-       ` <title>Team Profile</title>` +
-    `</head>` +
+    <body>
+        <nav class=\"navbar navbar-light navbar-default text-white justify-content-center mb-5\">
+            <div>
+                My Team
+            </div>
+        </nav>\n\n`;
 
-    `<body>` +
-    `<nav class=\"navbar navbar-light navbar-default text-white justify-content-center mb-5\">` +
-        `<div>` +
-            `My Team` +
-        `</div>` +
-    `</nav>`;
-
-    const footerHTML = `</body>` +
-
-            `</html>`;
+    const footerHTML = `</body>
+        </html>`;
 
 
     const role = 'name' in data ? data.getRole() : '';
@@ -130,30 +128,31 @@ function generateHTML(data, header, footer) {
 }
 
 function generateCard(id, name, role, email, trait) {
-    const cardBlock = `<section className=\"container\">` +
-        `<div className=\"row\">` +
-            `<div className=\"col-3 border p-2 m-2 secondary flex-column\">` +
-                `<div className=\"card\">` +
-                    `<div className=\"card-body text-white bg-primary\">` +
-                        `<h5 className=\"card-title\">${name}</h5>` +
-                        `<p className=\"card-text\">${role}</p>` +
-                    `</div>` +
+    const cardBlock = 
+    `\t\t<section class=\"container\">
+        <div class=\"row\">
+            <div class=\"col-3 border p-2 m-2 secondary flex-column\">
+                <div class=\"card\">
+                    <div class=\"card-body text-white bg-primary\">
+                        <h5 class=\"card-title\">${name}</h5>
+                        <p class=\"card-text\">${role}</p>
+                    </div>
 
-                    `<div>` +
-                        `<ul className=\"list-group list-group-flush bg-secondary\">` +
-                            `<li className=\"list-group-item\">ID: ${id}</li>` +
-                            `<li className=\"list-group-item\">Email: <a href=\"#\" className=\"card-link\">email here</a></li>` +
-                            `<li className=\"list-group-item\">
+                    <div>
+                        <ul class=\"list-group list-group-flush bg-secondary\">
+                            <li class=\"list-group-item\">ID: ${id}</li>
+                            <li class=\"list-group-item\">Email: <a href=\"#\" className=\"card-link\">email here</a></li>
+                            <li class=\"list-group-item\">
                                 ${role == 'Manager' ? ('Office: ' + trait)
-                                : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>` 
-                                    : 'School: ' + trait}
-                                </li>` +
-                        `</ul>` +
-                    `</div>` +
-                `</div>` +
-            `</div>` +
-        `</div>` +
-    `</section>`;
+                                : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>`
+                                : 'School: ' + trait}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>`;
     return cardBlock
 }
 
@@ -167,7 +166,7 @@ async function init() {
         .then(async (response) => {
             const manager = new Manager(response.name, response.id, response.email, response.office);
             console.log(manager);
-            writeToFile('./dist/generated-HTML.HTML', manager, true, false);
+            writeToFile('./dist/generated.html', manager, true, false);
             console.log('Successfully wrote manager!');
         })
 
@@ -207,13 +206,13 @@ async function init() {
                     } else {
                         employee = new Intern(response.name, response.id, response.email, response.school);
                     }
-                    appendToFile('./dist/generated-HTML.HTML', employee, false, true);
+                    appendToFile('./dist/generated.html', employee, false, true);
                     console.log('Successfully appended employee!');
                 })
         } else {
             console.log('writing footer');
-            appendToFile('.dist/generated-HTML.HTML', {}, false, true);
-            console.log('DONE!');
+            appendToFile('./dist/generated.html', {}, false, true);
+            console.log('DONE!')
         }
     }
 }
