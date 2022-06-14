@@ -1,12 +1,10 @@
 # 10 Object-Oriented Programming: Team Profile Generator
 
-## Your Task
+## Project Overview
 
-Your task is to build a Node.js command-line application that takes in information about employees on a software engineering team, then generates an HTML webpage that displays summaries for each person. Testing is key to making code maintainable, so you’ll also write a unit test for every part of your code and ensure that it passes each test.
+The goal of this project was to build a Node.js command-line application that takes in information about employees on a software engineering team, then generates an HTML webpage that displays summaries for each person. Testing is key to making code maintainable, so I have also wrote a unit test for every part of your code and ensured that they passed each test.
 
-Because this application won’t be deployed, you’ll need to provide a link to a walkthrough video that demonstrates its functionality and all of the tests passing. You’ll need to submit a link to the video AND add it to the readme of your project.
-
-> **Note**: There is no starter code for this assignment.
+Because this application won’t be deployed, below you will find a walkthrough video that demonstrates its functionality and proof of all unit tests passing.
 
 ## User Story
 
@@ -40,23 +38,29 @@ THEN I exit the application, and the HTML is generated
 
 ## Mock-Up
 
-The following image shows a mock-up of the generated HTML’s appearance and functionality:
+The following gif shows a mock-up of the generated HTML’s appearance and functionality:
 
 ![HTML webpage titled “My Team” features five boxes listing employee names, titles, and other key info.](./Assets/team-generator-gif.gif)
 
-The styling in the image is just an example, so feel free to add your own.
+Link to github repo:
+
+[GitHub repo](https://github.com/nflanner/Team-Profile-Generator)
 
 ## Getting Started
 
-This homework will combine many of the skills we've covered so far. In addition to the User Story and Acceptance Criteria, we’ve provided some guidelines to help get started.
+Clone the repo by using 
 
-Your application should use [Jest](https://www.npmjs.com/package/jest) for running the unit tests and [Inquirer](https://www.npmjs.com/package/inquirer) for collecting input from the user. The application will be invoked by using the following command:
+```
+git clone https://github.com/nflanner/Team-Profile-Generator.git
+```
+
+This application uses [Jest](https://www.npmjs.com/package/jest) for running the unit tests and [Inquirer](https://www.npmjs.com/package/inquirer) for collecting input from the user. The application can be invoked by using the following command:
 
 ```bash
 node index.js
 ```
 
-It is recommended that you start with a directory structure that looks like the following example:
+The directory structure is as follows:
 
 ```md
 .
@@ -73,51 +77,11 @@ It is recommended that you start with a directory structure that looks like the 
 └── package.json           
 ```
 
-**Important**: Make sure that you remove `dist` from the `.gitignore` file so that Git will track this folder and include it when you push up to your application's repository.
+Test suites can be run by using:
 
-The application must include `Employee`, `Manager`, `Engineer`, and `Intern` classes. The tests for these classes (in the `_tests_` directory) must ALL pass.
-
-The first class is an `Employee` parent class with the following properties and methods:
-
-* `name`
-
-* `id`
-
-* `email`
-
-* `getName()`
-
-* `getId()`
-
-* `getEmail()`
-
-* `getRole()`&mdash;returns `'Employee'`
-
-The other three classes will extend `Employee`.
-
-In addition to `Employee`'s properties and methods, `Manager` will also have the following:
-
-* `officeNumber`
-
-* `getRole()`&mdash;overridden to return `'Manager'`
-
-In addition to `Employee`'s properties and methods, `Engineer` will also have the following:
-
-* `github`&mdash;GitHub username
-
-* `getGithub()`
-
-* `getRole()`&mdash;overridden to return `'Engineer'`
-
-In addition to `Employee`'s properties and methods, `Intern` will also have the following:
-
-* `school`
-
-* `getSchool()`
-
-* `getRole()`&mdash;overridden to return `'Intern'`
-
-Finally, although it’s not a requirement, consider adding validation to ensure that user input is in the proper format.
+```
+npm test
+```
 
 ## Grading Requirements
 
