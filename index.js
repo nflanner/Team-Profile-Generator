@@ -144,7 +144,7 @@ function generateCard(id, name, role, email, trait) {
                         <div>
                             <ul class=\"list-group list-group-flush bg-secondary\">
                                 <li class=\"list-group-item\">ID: ${id}</li>
-                                <li class=\"list-group-item\">Email: <a href=\"#\" className=\"card-link\">${email}</a></li>
+                                <li class=\"list-group-item\">Email: <a href=\"${email}\" className=\"card-link\">${email}</a></li>
                                 <li class=\"list-group-item\">
                                     ${role == 'Manager' ? ('Office: ' + trait)
                                     : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>`
