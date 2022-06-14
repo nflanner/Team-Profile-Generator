@@ -120,7 +120,6 @@ function generateHTML(data, header, footer) {
 
 
     const role = 'name' in data ? data.getRole() : '';
-    console.log(`role: ${role}`);
     const trait = role == 'Manager' ? data.office : role == 'Engineer' ? data.github : data.school;
 
 
@@ -138,16 +137,19 @@ function generateCard(id, name, role, email, trait) {
                     <div class=\"card\">
                         <div class=\"card-body text-white bg-primary\">
                             <h5 class=\"card-title\">${name}</h5>
-                            <p class=\"card-text\">${role}</p>
+                            <p class=\"card-text\">${role == 'Manager' ? ('👔 Manager')
+                                : role == 'Engineer' ? ('💻 Engineer')
+                                : ('🎓 Intern')}
+                            </p>
                         </div>
 
                         <div>
                             <ul class=\"list-group list-group-flush bg-secondary\">
                                 <li class=\"list-group-item\">ID: ${id}</li>
-                                <li class=\"list-group-item\">Email: <a href=\"${email}\" className=\"card-link\">${email}</a></li>
+                                <li class=\"list-group-item\">Email: <a href=\"mailto:${email}\" target=\"_blank\" className=\"card-link\">${email}</a></li>
                                 <li class=\"list-group-item\">
                                     ${role == 'Manager' ? ('Office: ' + trait)
-                                    : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>`
+                                    : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" target=\"_blank\" className=\"card-link\">${trait}</a>`
                                     : 'School: ' + trait}
                                 </li>
                             </ul>
@@ -166,7 +168,6 @@ async function init() {
         .prompt(managerQuestions)
         .then(async (response) => {
             const manager = new Manager(response.name, response.id, response.email, response.office);
-            console.log(manager);
             writeToFile('./dist/generated.html', manager, true, false);
             console.log('Successfully wrote manager!');
         })
@@ -180,25 +181,19 @@ async function init() {
         await inquirer
             .prompt(buildQuestions)
             .then(async (response) => {
-                console.log(response.employee);
                 if(response.employee == 'Finished building team') {
                     buildTeam = false;
                 } else if (response.employee == 'Engineer') {
-                    console.log('engineer block');
                     isEngineer = true;
                     finalEmployeeQuestions.push(engineerQuestions);
                 } else {
-                    console.log('intern block');
                     isEngineer = false;
                     finalEmployeeQuestions.push(internQuestions);
                 }
-                console.log(`response: ${response}`);
             })
 
         let employee;
         if (buildTeam) {
-            console.log(finalEmployeeQuestions);
-            console.log('in emplyee block')
             await inquirer
                 .prompt(finalEmployeeQuestions)
                 .then(async (response) => {
