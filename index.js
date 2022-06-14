@@ -108,10 +108,15 @@ function generateHTML(data, header, footer) {
             <div>
                 My Team
             </div>
-        </nav>\n\n`;
+        </nav>
+        
+        <section class=\"container\">
+            <div class=\"row flex-wrap justify-content-center\">`;
 
-    const footerHTML = `</body>
-        </html>`;
+    const footerHTML = `\n\t\t\t</div>
+        </section>
+    </body>
+</html>`;
 
 
     const role = 'name' in data ? data.getRole() : '';
@@ -129,30 +134,26 @@ function generateHTML(data, header, footer) {
 
 function generateCard(id, name, role, email, trait) {
     const cardBlock = 
-    `\t\t<section class=\"container\">
-        <div class=\"row\">
-            <div class=\"col-3 border p-2 m-2 secondary flex-column\">
-                <div class=\"card\">
-                    <div class=\"card-body text-white bg-primary\">
-                        <h5 class=\"card-title\">${name}</h5>
-                        <p class=\"card-text\">${role}</p>
-                    </div>
+    `\n\t\t\t\t<div class=\"col-3 border p-2 m-2 secondary flex-column\">
+                    <div class=\"card\">
+                        <div class=\"card-body text-white bg-primary\">
+                            <h5 class=\"card-title\">${name}</h5>
+                            <p class=\"card-text\">${role}</p>
+                        </div>
 
-                    <div>
-                        <ul class=\"list-group list-group-flush bg-secondary\">
-                            <li class=\"list-group-item\">ID: ${id}</li>
-                            <li class=\"list-group-item\">Email: <a href=\"#\" className=\"card-link\">email here</a></li>
-                            <li class=\"list-group-item\">
-                                ${role == 'Manager' ? ('Office: ' + trait)
-                                : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>`
-                                : 'School: ' + trait}
-                            </li>
-                        </ul>
+                        <div>
+                            <ul class=\"list-group list-group-flush bg-secondary\">
+                                <li class=\"list-group-item\">ID: ${id}</li>
+                                <li class=\"list-group-item\">Email: <a href=\"#\" className=\"card-link\">${email}</a></li>
+                                <li class=\"list-group-item\">
+                                    ${role == 'Manager' ? ('Office: ' + trait)
+                                    : role == 'Engineer' ? `Github: <a href=\"http://github.com/${trait}\" className=\"card-link\">${trait}</a>`
+                                    : 'School: ' + trait}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>`;
+                </div>`;
     return cardBlock
 }
 
