@@ -38,9 +38,9 @@ THEN I exit the application, and the HTML is generated
 
 ## Mock-Up
 
-The following gif shows a mock-up of the generated HTML’s appearance and functionality:
+The following link shows a mock-up video of the generated HTML’s appearance and functionality:
 
-![HTML webpage titled “My Team” features five boxes listing employee names, titles, and other key info.](./Assets/team-generator-gif.gif)
+[Mockup Video](https://drive.google.com/file/d/1guKf4spBitgJb4mQL-fHDx_vynu4usHf/view)
 
 Link to github repo:
 
